@@ -9,6 +9,7 @@
 #include "jukebox.h"
 #include "pushy.h"
 #include "pong.h"
+#include "racer.h"
 #include "soko.h"
 #include "marbles.h"
 #include "mode_paint.h"
@@ -117,6 +118,7 @@ static void mainMenuEnterMode(void)
     addSingleItemToMenu(mainMenu->menu, demoMode.modeName);
     addSingleItemToMenu(mainMenu->menu, lumberjackMode.modeName);
     addSingleItemToMenu(mainMenu->menu, pongMode.modeName);
+    addSingleItemToMenu(mainMenu->menu, racerMode.modeName);
     addSingleItemToMenu(mainMenu->menu, marblesMode.modeName);
     addSingleItemToMenu(mainMenu->menu, colorchordMode.modeName);
     addSingleItemToMenu(mainMenu->menu, modePaint.modeName);
@@ -209,6 +211,10 @@ static void mainMenuCb(const char* label, bool selected, uint32_t settingVal)
         else if (label == pongMode.modeName)
         {
             switchToSwadgeMode(&pongMode);
+        }
+        else if (label == racerMode.modeName)
+        {
+            switchToSwadgeMode(&racerMode);
         }
         else if (label == marblesMode.modeName)
         {
