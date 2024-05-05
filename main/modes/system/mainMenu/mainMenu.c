@@ -19,6 +19,8 @@
 #include "touchTest.h"
 #include "tunernome.h"
 
+#include "ddr.h"
+
 #include "settingsManager.h"
 
 //==============================================================================
@@ -143,6 +145,7 @@ static void mainMenuEnterMode(void)
     // Add single items
     mainMenu->menu = startSubMenu(mainMenu->menu, "Games");
     addSingleItemToMenu(mainMenu->menu, pinballMode.modeName);
+    addSingleItemToMenu(mainMenu->menu, ddrMode.modeName);
     mainMenu->menu = endSubMenu(mainMenu->menu);
 
     mainMenu->menu = startSubMenu(mainMenu->menu, "Music");
@@ -333,6 +336,10 @@ static void mainMenuCb(const char* label, bool selected, uint32_t settingVal)
         else if (label == pinballMode.modeName)
         {
             switchToSwadgeMode(&pinballMode);
+        }
+        else if (label == ddrMode.modeName)
+        {
+            switchToSwadgeMode(&ddrMode);
         }
         else if (label == timerMode.modeName)
         {
