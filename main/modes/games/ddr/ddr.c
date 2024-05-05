@@ -861,20 +861,19 @@ static void ddrResetGame(bool isInit)
             case DDR_SONG_1:
             {
                 ddrSetupTrack("song1.json");
-                //bzrPlayBgm(&ddr->song1, BZR_STEREO);
-                soundPlayBgmCb(&ddr->song1, BZR_STEREO);
+                soundPlayBgm(&ddr->song1, BZR_STEREO);
                 break;
             }
             case DDR_SONG_2:
             {
                 ddrSetupTrack("song2.json");
-                bzrPlayBgm(&ddr->song2, BZR_STEREO);
+                soundPlayBgm(&ddr->song2, BZR_STEREO);
                 break;
             }
             case DDR_SONG_3:
             {
                 ddrSetupTrack("song3.json");
-                bzrPlayBgm(&ddr->song3, BZR_STEREO);
+                soundPlayBgm(&ddr->song3, BZR_STEREO);
                 break;
             }
         }
