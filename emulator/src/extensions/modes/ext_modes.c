@@ -20,6 +20,7 @@
 #include "colorchord.h"
 #include "dance.h"
 #include "factoryTest.h"
+#include "FoxsGame.h"
 #include "gamepad.h"
 #include "introMode.h"
 #include "jukebox.h"
@@ -60,6 +61,7 @@ static swadgeMode_t* allSwadgeModes[] = {
     &colorchordMode,
     &danceMode,
     &factoryTestMode,
+    &foxMode,
     &gamepadMode,
     &introMode,
     &jukeboxMode,
