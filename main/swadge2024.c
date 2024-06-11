@@ -172,6 +172,7 @@
 
 #include "factoryTest.h"
 #include "mainMenu.h"
+#include "mode_puzzledrop.h"
 #include "quickSettings.h"
 
 //==============================================================================
@@ -241,12 +242,12 @@ void app_main(void)
     if (getTestModePassedSetting())
     {
         // Show the main menu
-        cSwadgeMode = &mainMenuMode;
+        cSwadgeMode = &puzzledropMode;
     }
     else
     {
         // Otherwise enter test mode
-        cSwadgeMode = &factoryTestMode;
+        cSwadgeMode = &mainMenuMode;
     }
 
     // If the ESP woke from sleep, and there is a pending Swadge Mode
@@ -281,8 +282,8 @@ void app_main(void)
     // Init buttons and touch pads
     gpio_num_t pushButtons[] = {
         GPIO_NUM_0,  // Up
-        GPIO_NUM_4,  // Down
-        GPIO_NUM_2,  // Left
+        GPIO_NUM_2,  // Down
+        GPIO_NUM_4,  // Left
         GPIO_NUM_1,  // Right
         GPIO_NUM_16, // A
         GPIO_NUM_15, // B

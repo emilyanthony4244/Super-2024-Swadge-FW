@@ -76,7 +76,7 @@ static void demoEnterMode(void)
 {
     dv = calloc(1, sizeof(demoVars_t));
     loadFont("ibm_vga8.font", &dv->ibm, false);
-    loadWsg("kid0.wsg", &dv->king_donut, true);
+    loadWsg("test.wsg", &dv->king_donut, true);
     loadSong("ode.sng", &dv->ode_to_joy, true);
 
     soundPlayBgm(&dv->ode_to_joy, BZR_STEREO);
