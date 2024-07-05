@@ -1,5 +1,15 @@
 {
     "files.associations": {
-        "cross.h": "c"
+        "cross.h": "c",
+        "stdlib.h": "c",
+        "stdbool.h": "c",
+        "crossfile.h": "c",
+        "crossplayer.h": "c",
+        "collcheck.h": "c",
+        "stdint.h": "c",
+        "compare": "c",
+        "math.h": "c",
+        "stdio.h": "c",
+        "sprites.h": "c"
     }
 }

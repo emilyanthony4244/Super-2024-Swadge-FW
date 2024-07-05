@@ -1,7 +1,7 @@
 //==============================================================================
 // Includes
 //==============================================================================
-
+#include <stdio.h>
 #include "swadge2024.h"
 
 #include "mainMenu.h"
@@ -11,6 +11,10 @@
 #include "dance.h"
 #include "factoryTest.h"
 #include "FoxsGame.h"
+#include "Cross.h"
+#include "files/CrossPlayer.h"
+#include "files/collCheck.h"
+#include "files/sprites.h"
 #include "gamepad.h"
 #include "introMode.h"
 #include "jukebox.h"
@@ -150,6 +154,7 @@ static void mainMenuEnterMode(void)
     addSingleItemToMenu(mainMenu->menu, tttMode.modeName);
     addSingleItemToMenu(mainMenu->menu, pinballMode.modeName);
     addSingleItemToMenu(mainMenu->menu, foxMode.modeName);
+    addSingleItemToMenu(mainMenu->menu, CrossMode.modeName);
     mainMenu->menu = endSubMenu(mainMenu->menu);
 
     mainMenu->menu = startSubMenu(mainMenu->menu, "Music");
@@ -329,6 +334,12 @@ static void mainMenuCb(const char* label, bool selected, uint32_t settingVal)
         else if (label == foxMode.modeName)
         {
             switchToSwadgeMode(&foxMode);
+        }
+        else if (label == CrossMode.modeName)
+        {
+	    printf("Switching to CrossMode\n");
+            switchToSwadgeMode(&CrossMode);
+	    printf("CrossMode switch complete\n");
         }
         else if (label == gamepadMode.modeName)
         {
