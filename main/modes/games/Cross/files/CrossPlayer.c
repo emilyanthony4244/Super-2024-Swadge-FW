@@ -59,10 +59,10 @@ void movePlayer(Player* plyer, int h, int states[3]) {
 
         if ((states[2] == 2 && plyer->dash == 1) && (states[1] != 0 || states[0] != 0)) {
             if (states[1] == 2) {
-                plyer->speed[1] = -8;
+                plyer->speed[1] = -4;
             }
             if (states[1] == 1) {
-                plyer->speed[1] = 8;
+                plyer->speed[1] = 4;
             }
             if (states[0] == 2) {
                 plyer->speed[0] = 8;

@@ -10,6 +10,7 @@
         "compare": "c",
         "math.h": "c",
         "stdio.h": "c",
-        "sprites.h": "c"
+        "sprites.h": "c",
+        "online.h": "c"
     }
 }

@@ -75,36 +75,66 @@ static void crossExitMode() {
     CrossP = NULL;
 }
 
-int ZaWarudo[11][4] = {
-    {20, 20, 30, 5}, {40, 22, 10, 18}, {-10, 30, 60, 5},
-    {60, 30, 5, 5}, {65, 25, 5, 5}, {70, 20, 5, 5}, 
-    {75, 15, 5, 5}, {80, 10, 5, 5}, {85, 5, 5, 5}, {90, 0, 5, 5},
-    {-50, 10, 20, 30}
+int ZaWarudo[1][12][4] = {
+    {
+        {20, 20, 30, 5}, {40, 22, 10, 18}, {-10, 30, 60, 5},
+        {60, 30, 5, 5}, {65, 25, 5, 5}, {70, 20, 5, 5},
+        {75, 15, 5, 5}, {80, 10, 5, 5}, {85, 5, 5, 5}, {90, 0, 5, 5},
+        {-1000, 10, 500, 30}, {-1000, -15, 500, 10}
+    }
 };
+
+void clip(int *x1, int *y1, int *x2, int *y2){
+    if (*x1 < 0) *x1 = 0;
+    if (*x1 > 279) *x1 = 279;
+    if (*x2 < 0) *x2 = 0;
+    if (*x2 > 279) *x2 = 279;
+    if (*y1 < 0) *y1 = 0;
+    if (*y1 > 239) *y1 = 239;
+    if (*y2 < 0) *y2 = 0;
+    if (*y2 > 239) *y2 = 239;
+}
+
+bool isBoxOffscreen(int x1, int y1, int w, int h) {
+    return (x1 + w < 0 || x1 > 279 || y1 + h < 0 || y1 > 239);
+}
 
 void renderWorld(Player* p, int lastAnimate) {
     fillDisplayArea(0, 0, 280, 240, c000);
-    for (int i = 0; i < sizeof(ZaWarudo) / sizeof(ZaWarudo[0]); i++) {
-        int* collidr = ZaWarudo[i];
-        
-        int x1 = collidr[0] + p->camera[0];
-        int y1 = collidr[1] + p->camera[1];
-        int x2 = x1 + collidr[2];
-        int y2 = y1;
-        drawLineFast(x1, y1, x2, y2, c555);
+    for(int l = 0; l < sizeof(ZaWarudo) / sizeof(ZaWarudo[0]); l++) {
+        for (int i = 0; i < sizeof(ZaWarudo[0]) / sizeof(ZaWarudo[0][0]); i++) {
+            int* collidr = ZaWarudo[l][i];
+            
+            int x1 = collidr[0] + p->camera[0];
+            int y1 = collidr[1] + p->camera[1];
+            int x2 = x1 + collidr[2];
+            int y2 = y1 + collidr[3];
 
-        x1 = x2;
-        y1 = y2;
-        y2 = y1 + collidr[3];
-        drawLineFast(x1, y1, x2, y2, c555);
+            if (isBoxOffscreen(x1, y1, collidr[2], collidr[3])) {
+                continue;
+            }
 
-        x2 = collidr[0] + p->camera[0];
-        y1 = y2;
-        drawLineFast(x1, y1, x2, y2, c555);
+            x2 = x1 + collidr[2];
+            y2 = y1;
+            clip(&x1, &y1, &x2, &y2);
+            drawLineFast(x1, y1, x2, y2, c555);
 
-        x1 = x2;
-        y2 = collidr[1] + p->camera[1];
-        drawLineFast(x1, y1, x2, y2, c555);
+            x1 = x2;
+            y1 = y2;
+            y2 = y1 + collidr[3];
+            clip(&x1, &y1, &x2, &y2);
+            drawLineFast(x1, y1, x2, y2, c555);
+
+            x2 = collidr[0] + p->camera[0];
+            y1 = y2;
+            clip(&x1, &y1, &x2, &y2);
+            drawLineFast(x1, y1, x2, y2, c555);
+
+            x1 = x2;
+            y2 = collidr[1] + p->camera[1];
+            clip(&x1, &y1, &x2, &y2);
+            drawLineFast(x1, y1, x2, y2, c555);
+        }
     }
 
     printf("Rendering player at (%d, %d) with size (%d, %d)\n", p->positions[0] + p->camera[0], p->positions[1] + p->camera[1], CrossP->w_h[0], CrossP->w_h[1]);
@@ -224,40 +254,36 @@ static void btns() {
     }
 }
 
-#include "Cross.h"
-#include <stdio.h>
-
-#include "Cross.h"
-#include <stdio.h>
-
 static void handle_collision(Player* p) {
     int pw = CrossP->w_h[0];
     int ph = CrossP->w_h[1];
 
-    for (int i = 0; i < sizeof(ZaWarudo) / sizeof(ZaWarudo[0]); i++) {
-        int* collider = ZaWarudo[i];
-        int colliding = check_collision(p->positions, pw, ph, (int[]){collider[0], collider[1], collider[2], collider[3]});
-        
-        if (colliding != NO_COLLISION) {
-            if (colliding == COLLISION_FEET) {
-                p->positions[1] = collider[1] - ph;
-                p->speed[1] = 1;
-                p->falling = 0;
-                if (!(btnStatez & PB_LEFT) && !(btnStatez & PB_RIGHT)) {
-                    p->anim = 0;
-                } else {
-                    p->anim = 1;
+    for(int l = 0; l < sizeof(ZaWarudo) / sizeof(ZaWarudo[0]); l++) {
+        for (int i = 0; i < sizeof(ZaWarudo[0]) / sizeof(ZaWarudo[0][0]); i++) {
+            int* collider = ZaWarudo[l][i];
+            int colliding = check_collision(p->positions, pw, ph, (int[]){collider[0], collider[1], collider[2], collider[3]});
+            
+            if (colliding != NO_COLLISION) {
+                if (colliding == COLLISION_FEET) {
+                    p->positions[1] = collider[1] - ph;
+                    p->speed[1] = 1;
+                    p->falling = 0;
+                    if (!(btnStatez & PB_LEFT) && !(btnStatez & PB_RIGHT)) {
+                        p->anim = 0;
+                    } else {
+                        p->anim = 1;
+                    }
+                } else if (colliding == COLLISION_HEAD) {
+                    p->positions[1] = collider[1] + collider[3] + 0.1;
+                    p->speed[1] = 0;
                 }
-            } else if (colliding == COLLISION_HEAD) {
-                p->positions[1] = collider[1] + collider[3];
-                p->speed[1] = 0;
-            }
-            if (colliding == COLLISION_LEFT_SIDE) {
-                p->positions[0] = collider[0] - pw - 0.1;
-                p->speed[0] = 0;
-            } else if (colliding == COLLISION_RIGHT_SIDE) {
-                p->positions[0] = collider[0] + collider[2] + 0.1;
-                p->speed[0] = 0;
+                if (colliding == COLLISION_LEFT_SIDE) {
+                    p->positions[0] = collider[0] - pw - 0.1;
+                    p->speed[0] = 0;
+                } else if (colliding == COLLISION_RIGHT_SIDE) {
+                    p->positions[0] = collider[0] + collider[2] + 0.1;
+                    p->speed[0] = 0;
+                }
             }
         }
     }
