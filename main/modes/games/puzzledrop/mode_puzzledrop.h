@@ -22,10 +22,13 @@ typedef struct
     wsg_t orangeTiles;
     
     puzzledropTile_t* tiles[182];
+    int board[91];
 
-    int8_t currentMode; 
+    int8_t currentMode; //gameStatus ??
+    int controlTickCnt; //120 ->main.go
 
     int16_t tile_y;
+    int16_t gameSpeed;
 
     font_t ibm_vga8;
     int32_t frameTimer;

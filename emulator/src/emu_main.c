@@ -165,7 +165,7 @@ int main(int argc, char** argv)
 #if defined(__linux) || defined(__linux__) || defined(linux) || defined(__LINUX__) || defined(__APPLE__)
     init_crashSignals();
 #endif
-
+    printf("Starting");
     handleArgs(argc, argv);
 
     if (!isRunning)

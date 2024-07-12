@@ -1,6 +1,5 @@
 
 #include <stdlib.h>
-#include <esp_log.h>
 
 #include "mainMenu.h"
 #include "menu.h"
@@ -18,6 +17,10 @@ static void puzzledropBackgroundDrawCallback(int16_t x, int16_t y, int16_t w,  i
 static void puzzledropEspNowRecvCb(const esp_now_recv_info_t* esp_now_info, const uint8_t* data, uint8_t len, int8_t rssi);
 static void puzzledropEspNowSendCb(const uint8_t* mac_addr, esp_now_send_status_t status);
 static int16_t puzzledropAdvancedUSB(uint8_t* buffer, uint16_t length, uint8_t isGet);
+
+#define STATE_DROPPING     1
+#define STATE_CHECKING     2
+
 
 
 swadgeMode_t puzzledropMode = {
@@ -54,14 +57,14 @@ static void puzzledropEnterMode(void)
         puzzledrop->tiles[i]->y = -100;
     }
 
-    ESP_LOGI("PUZ", "%d %d", TFT_HEIGHT, TFT_WIDTH );
+    for (int i = 0; i < ARRAY_SIZE(puzzledrop->board); i++)
+    {
+        puzzledrop->board[i] = 0;
+    }
 
-    puzzledrop->tiles[0]->active = true;
-    puzzledrop->tiles[0]->dropping = true;
-    puzzledrop->tiles[0]->x = 0;
-    puzzledrop->tiles[0]->y = 0;
+    //ESP_LOGI("PUZ", "%d %d", TFT_HEIGHT, TFT_WIDTH );
 
-    puzzledrop->currentMode = 1;
+    puzzledrop->currentMode = STATE_CHECKING;
 }
 
 static void puzzledropExitMode(void)
@@ -73,13 +76,21 @@ static void puzzledropMainLoop(int64_t elapsedUs)
 {
     puzzledropVars_t* p = puzzledrop;
 
-    ESP_LOGI("PUZZ_GAME", "Update 0");
+    //ESP_LOGI("PUZZ_GAME", "Update 0");
     p->frameTimer += elapsedUs;
     while (p->frameTimer >= PUZ_US_PER_FRAME)
     {
         p->frameTimer -= PUZ_US_PER_FRAME;
         //Update physics
-        puzzledropUpdate(p);
+
+        if (p->currentMode == STATE_DROPPING)
+        {
+            puzzledropUpdate(p, elapsedUs);
+        }
+        else if (p->currentMode == STATE_CHECKING)
+        {
+            puzzledropCheck(p);
+        }
     }
 
     

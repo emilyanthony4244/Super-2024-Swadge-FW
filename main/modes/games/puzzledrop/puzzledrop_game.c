@@ -8,6 +8,19 @@
 #define OFFSET_X            60
 #define OFFSET_Y            20
 
+
+//Squongy!
+
+#define STATE_DROPPING     1
+#define STATE_CHECKING     2
+#define STATE_NEWOBJECT    4
+#define STATE_GAMEOVER     5
+
+#define COLOR_NONE         0
+#define COLOR_ORANGE       1
+#define COLOR_RED          2
+#define COLOR_BLUE         3
+
 #include <esp_log.h>
 
 #include "puzzledrop_game.h"
@@ -20,6 +33,7 @@ void puzzledropDraw(puzzledropVars_t* p)
         for (int y = 0; y < NUM_ROWS; y++)
             drawWsgSimple(&p->tileBackground, OFFSET_X + (x * CELL_SIZE), OFFSET_Y + (y * CELL_SIZE) );
     }
+    
     drawLine(OFFSET_X + (CELL_SIZE * NUM_COLUMNS) - 1, OFFSET_Y, OFFSET_X + (CELL_SIZE * NUM_COLUMNS) -1, OFFSET_Y + (CELL_SIZE * NUM_ROWS) -1, c555, 0);
     drawLine(OFFSET_X, OFFSET_Y, OFFSET_X, OFFSET_Y + (CELL_SIZE * NUM_ROWS) -1, c555, 0);
     drawLine(OFFSET_X, OFFSET_Y , OFFSET_X + (CELL_SIZE * NUM_COLUMNS) - 1, OFFSET_Y, c555, 0);
@@ -38,8 +52,7 @@ void puzzledropDraw(puzzledropVars_t* p)
     }
 
         char tmp[8];
-        snprintf(tmp, sizeof(tmp) - 1, "%" PRIu32, p->tile_y);
-        drawText(&p->ibm_vga8, c555, tmp, 135, 16);
+        //drawText(&p->ibm_vga8, c555, tmp, 135, 16);
 
     for (int i = 0; i < ARRAY_SIZE(p->tiles); i++)
     {
@@ -51,34 +64,159 @@ void puzzledropDraw(puzzledropVars_t* p)
 
     }
     
+    ////////
+    puzzleStartLevel(p);
+    //p->gameSpeed = 8;
 }
 
-#define STATE_DROPPING     1
-#define STATE_CHECKING     2
+void puzzleStartLevel(puzzledropVars_t* p)
+{
+    p->gameSpeed = 4;
+}
 
-void puzzledropUpdate(puzzledropVars_t* p)
+void puzzledropUpdate(puzzledropVars_t* p, int64_t elapsedUs)
 {
     if (p->currentMode == STATE_DROPPING)
     {
-        p->tile_y += 4;
-        if (p->tile_y >= 212 - OFFSET_Y)
-            p->tile_y = 212- OFFSET_Y;
+        bool collision = false;
+        int collisionOffset;
+        int tileDestination;
+        int destinationTileX = 0;
+        int destinationTileY = 0;
 
+        // for (int i = 0; i < ARRAY_SIZE(p->tiles); i++)
+        p->controlTickCnt -= elapsedUs/ 1000;
+        bool update = p->controlTickCnt < 0;
+        if (p->controlTickCnt < 0)
+        {
+            p->controlTickCnt = 128;
+            //printf("Tick %d", elapsedUs);
+        }
 
-        for (int i = 0; i < ARRAY_SIZE(p->tiles); i++)
+        
+        //Do it from bottom up ???
+        for (int i =  ARRAY_SIZE(p->tiles) -1; i >= 0; i--)
         {
             if (!p->tiles[i]->dropping || !p->tiles[i]->active) continue;
 
             puzzledropTile_t* tile = p->tiles[i];
 
-
-            tile->y += 1;
-
-            if (tile->y >= 212 - OFFSET_Y)
+            if (update)
             {
-                tile->y = 212 - OFFSET_Y;
+                tile->dy += p->gameSpeed;
+            }
+
+            destinationTileX = tile->dx/CELL_SIZE;
+            destinationTileY = ((tile->dy + CELL_SIZE + p->gameSpeed)/CELL_SIZE);
+            
+            if (tile->dy < OFFSET_Y)
+            {
+                if (p->board[destinationTileX + (destinationTileY * NUM_COLUMNS)] != 0)
+                {
+                    printf("Game over!");
+                    collision = false;
+                    p->currentMode = STATE_GAMEOVER;
+                    break;
+                }
+            }
+            else if (tile->dy >= 212 - OFFSET_Y)
+            {
+                destinationTileY = NUM_ROWS -1;
+                tile->dy = 212 - OFFSET_Y;
                 tile->dropping = false;
+                collision = true;
+                p->board[destinationTileX + (destinationTileY * NUM_COLUMNS)] = tile->color;
+                printf("Bottom out! %d %d\n", destinationTileX + (destinationTileY * NUM_COLUMNS), tile->dy/CELL_SIZE);
+            }
+            else
+            {
+
+                if (destinationTileY < NUM_ROWS && p->board[destinationTileX + (destinationTileY * NUM_COLUMNS)] != 0)
+                {
+                    tile->dy = (destinationTileY - 1) * CELL_SIZE;
+                    tile->dropping = false;
+                    collision = true;
+                    p->board[destinationTileX + ((destinationTileY -1) * NUM_COLUMNS)] =  tile->color;
+                    printf("Got here! %d,%d index->%d color->%d \n",  destinationTileX, destinationTileY, destinationTileX + (destinationTileY * NUM_COLUMNS), p->board[destinationTileX + (destinationTileY * NUM_COLUMNS)]);
+                }
+
+                
             }
         }
+        
+        if (collision)
+        {
+            int xx = ARRAY_SIZE(p->board);
+            printf("TT BOOM! %d \n---\n", xx);
+
+            for (int i = 0; i < ARRAY_SIZE(p->board); i++)
+            {
+                if (i % NUM_COLUMNS == 0)
+                {
+                    printf("\n");
+                }
+                printf("%d ", p->board[i]);
+            }
+            printf("\n----");
+        }
+
+        if (p->currentMode == STATE_GAMEOVER)
+        {
+            for (int i =  ARRAY_SIZE(p->tiles) -1; i >= 0; i--)
+            {
+                if (!p->tiles[i]->dropping || !p->tiles[i]->active) continue;
+
+                puzzledropTile_t* tile = p->tiles[i];
+                tile->active = false;
+                //tile->dx = tile->x / CELL_SIZE;
+                tile->dy = -100;
+            }
+        }
+
+        
+        for (int i = 0; i < ARRAY_SIZE(p->tiles); i++)
+        {
+            if (!p->tiles[i]->active) continue;
+
+            puzzledropTile_t* tile = p->tiles[i];
+
+            tile->y = tile->dy;
+            tile->x = tile->dx;
+        }
+
+
+
+        if (collision)
+        {
+            p->currentMode = STATE_CHECKING;
+        }
+        
     }
+
+
+}
+
+void puzzledropCheck(puzzledropVars_t* p)
+{
+    printf("New Color check %d \n", COLOR_ORANGE);
+    for (int x = 0; x < 2; x++)
+    {
+
+
+    for (int i = 0; i < ARRAY_SIZE(p->tiles); i++)
+    {
+        if (p->tiles[i]->active) continue;
+
+        p->tiles[i]->active = true;
+        p->tiles[i]->dx = 3 * CELL_SIZE;
+        p->tiles[i]->dy = -x * CELL_SIZE;
+        p->tiles[i]->dropping = true;
+        p->tiles[i]->color = COLOR_ORANGE;
+
+        break;
+    }
+    }
+
+    //if game not over
+    p->currentMode = STATE_DROPPING;
 }
