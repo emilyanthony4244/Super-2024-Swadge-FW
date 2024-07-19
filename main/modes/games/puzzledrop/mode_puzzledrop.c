@@ -6,6 +6,8 @@
 
 #include "mode_puzzledrop.h"
 #include "puzzledrop_game.h"
+#include "esp_log.h"
+
 
 static const char puzzledropName[] = "Puzzle Drop";
 
@@ -18,8 +20,12 @@ static void puzzledropEspNowRecvCb(const esp_now_recv_info_t* esp_now_info, cons
 static void puzzledropEspNowSendCb(const uint8_t* mac_addr, esp_now_send_status_t status);
 static int16_t puzzledropAdvancedUSB(uint8_t* buffer, uint16_t length, uint8_t isGet);
 
-#define STATE_DROPPING     1
-#define STATE_CHECKING     2
+
+#define STATE_CONTROL      1
+#define STATE_DROPPING     2
+#define STATE_CHECKING     3
+#define STATE_NEWOBJECT    4
+#define STATE_GAMEOVER     5
 
 
 
@@ -64,7 +70,7 @@ static void puzzledropEnterMode(void)
 
     //ESP_LOGI("PUZ", "%d %d", TFT_HEIGHT, TFT_WIDTH );
 
-    puzzledrop->currentMode = STATE_CHECKING;
+    puzzledrop->currentMode = STATE_NEWOBJECT;
 }
 
 static void puzzledropExitMode(void)
@@ -76,20 +82,23 @@ static void puzzledropMainLoop(int64_t elapsedUs)
 {
     puzzledropVars_t* p = puzzledrop;
 
-    //ESP_LOGI("PUZZ_GAME", "Update 0");
     p->frameTimer += elapsedUs;
     while (p->frameTimer >= PUZ_US_PER_FRAME)
     {
         p->frameTimer -= PUZ_US_PER_FRAME;
         //Update physics
 
-        if (p->currentMode == STATE_DROPPING)
+        if (p->currentMode == STATE_CONTROL)
         {
             puzzledropUpdate(p, elapsedUs);
         }
         else if (p->currentMode == STATE_CHECKING)
         {
-            puzzledropCheck(p);
+            //puzzledropCheck(p);
+        }
+        else if (p->currentMode == STATE_NEWOBJECT)
+        {
+            puzzledropNewObject(p, elapsedUs);
         }
     }
 

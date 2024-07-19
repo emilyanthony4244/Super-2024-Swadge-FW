@@ -22,7 +22,13 @@ typedef struct
     wsg_t orangeTiles;
     
     puzzledropTile_t* tiles[182];
-    int board[91];
+    int board[104];
+    int tick;
+    int tile1;
+    int tile2;
+
+    bool shifting;
+    int tickOffset;
 
     int8_t currentMode; //gameStatus ??
     int controlTickCnt; //120 ->main.go
