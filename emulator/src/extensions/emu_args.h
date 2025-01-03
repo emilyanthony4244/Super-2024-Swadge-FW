@@ -33,6 +33,8 @@ typedef struct
     bool fuzzTouch;
     bool fuzzMotion;
 
+    bool fuzzMenuButton;
+
     bool headless;
 
     /// @brief Name of the keymap to use, or NULL if none

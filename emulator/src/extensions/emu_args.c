@@ -87,10 +87,11 @@ emuArgs_t emulatorArgs = {
     .fullscreen = false,
     .hideLeds   = false,
 
-    .fuzz        = false,
-    .fuzzButtons = false,
-    .fuzzTouch   = false,
-    .fuzzMotion  = false,
+    .fuzz           = false,
+    .fuzzButtons    = false,
+    .fuzzTouch      = false,
+    .fuzzMotion     = false,
+    .fuzzMenuButton = false,
 
     .headless = false,
 
@@ -134,6 +135,7 @@ static const char argFuzzButtons[] = "fuzz-buttons";
 static const char argFuzzTouch[]   = "fuzz-touch";
 static const char argFuzzTime[]    = "fuzz-time";
 static const char argFuzzMotion[]  = "fuzz-motion";
+static const char argFuzzMenu[]    = "fuzz-menu-button";
 static const char argHeadless[]    = "headless";
 static const char argHideLeds[]    = "hide-leds";
 static const char argKeymap[]      = "keymap";
@@ -157,30 +159,31 @@ static const char argUsage[]       = "usage";
  */
 static const struct option options[] =
 {
-    { argFakeFps,     required_argument, NULL,                             0    },
-    { argFakeTime,    no_argument,       (int*)&emulatorArgs.fakeTime,     true },
-    { argFullscreen,  no_argument,       (int*)&emulatorArgs.fullscreen,   true },
-    { argFuzz,        no_argument,       (int*)&emulatorArgs.fuzz,         true },
-    { argFuzzButtons, optional_argument, (int*)&emulatorArgs.fuzzButtons,  true },
-    { argFuzzTime,    optional_argument, (int*)&emulatorArgs.fuzzTime,     true },
-    { argFuzzTouch,   optional_argument, (int*)&emulatorArgs.fuzzTouch,    true },
-    { argFuzzMotion,  optional_argument, (int*)&emulatorArgs.fuzzMotion,   true },
-    { argHeadless,    no_argument,       (int*)&emulatorArgs.headless,     true },
-    { argHideLeds,    no_argument,       (int*)&emulatorArgs.hideLeds,     true },
-    { argKeymap,      required_argument, NULL,                             'k'  },
-    { argLock,        no_argument,       (int*)&emulatorArgs.lock,         true },
-    { argMidiFile,    required_argument, NULL,                             0    },
-    { argMode,        required_argument, NULL,                             'm'  },
-    { argPlayback,    required_argument, (int*)&emulatorArgs.playback,     'p'  },
-    { argRecord,      optional_argument, (int*)&emulatorArgs.record,       'r'  },
-    { argSeed,        required_argument, (int*)&emulatorArgs.seed,         0    },
-    { argShowFps,     optional_argument, (int*)&emulatorArgs.showFps,      'c'  },
-    { argModeSwitch,  optional_argument, NULL,                             10   },
-    { argModeList,    no_argument,       NULL,                             0    },
-    { argTouch,       no_argument,       (int*)&emulatorArgs.emulateTouch, 't'  },
-    { argVsync,       optional_argument, (int*)&emulatorArgs.vsync,        true },
-    { argHelp,        no_argument,       NULL,                             'h'  },
-    { argUsage,       no_argument,       NULL,                             0    },
+    { argFakeFps,     required_argument, NULL,                                0    },
+    { argFakeTime,    no_argument,       (int*)&emulatorArgs.fakeTime,        true },
+    { argFullscreen,  no_argument,       (int*)&emulatorArgs.fullscreen,      true },
+    { argFuzz,        no_argument,       (int*)&emulatorArgs.fuzz,            true },
+    { argFuzzButtons, optional_argument, (int*)&emulatorArgs.fuzzButtons,     true },
+    { argFuzzTime,    optional_argument, (int*)&emulatorArgs.fuzzTime,        true },
+    { argFuzzTouch,   optional_argument, (int*)&emulatorArgs.fuzzTouch,       true },
+    { argFuzzMotion,  optional_argument, (int*)&emulatorArgs.fuzzMotion,      true },
+    { argFuzzMenu,    optional_argument, (int*)&emulatorArgs.fuzzMenuButton,  true },
+    { argHeadless,    no_argument,       (int*)&emulatorArgs.headless,        true },
+    { argHideLeds,    no_argument,       (int*)&emulatorArgs.hideLeds,        true },
+    { argKeymap,      required_argument, NULL,                                'k'  },
+    { argLock,        no_argument,       (int*)&emulatorArgs.lock,            true },
+    { argMidiFile,    required_argument, NULL,                                0    },
+    { argMode,        required_argument, NULL,                                'm'  },
+    { argPlayback,    required_argument, (int*)&emulatorArgs.playback,        'p'  },
+    { argRecord,      optional_argument, (int*)&emulatorArgs.record,          'r'  },
+    { argSeed,        required_argument, (int*)&emulatorArgs.seed,            0    },
+    { argShowFps,     optional_argument, (int*)&emulatorArgs.showFps,         'c'  },
+    { argModeSwitch,  optional_argument, NULL,                                10   },
+    { argModeList,    no_argument,       NULL,                                0    },
+    { argTouch,       no_argument,       (int*)&emulatorArgs.emulateTouch,    't'  },
+    { argVsync,       optional_argument, (int*)&emulatorArgs.vsync,           true },
+    { argHelp,        no_argument,       NULL,                                'h'  },
+    { argUsage,       no_argument,       NULL,                                0    },
     {0},
 };
 
@@ -197,6 +200,7 @@ static const optDoc_t argDocs[] =
     { 0,  argFuzzTouch,   "y|n",   "Set whether touchpad inputs are fuzzed" },
     { 0,  argFuzzTime,    "y|n",   "Set whether frame durations are fuzzed" },
     { 0,  argFuzzMotion,  "y|n",   "Set whether motion inputs are fuzzed" },
+    { 0,  argFuzzMenu,    "y|n",   "Set whether the menu button is fuzzed" },
     { 0,  argHeadless,    NULL,    "Runs the emulator without a window." },
     { 0,  argHideLeds,    NULL,    "Don't draw simulated LEDs next to the display" },
     {'k', argKeymap,     "LAYOUT", "Use an alternative keymap. LAYOUT can be azerty, colemak, or dvorak"},

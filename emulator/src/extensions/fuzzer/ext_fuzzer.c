@@ -29,6 +29,7 @@ typedef struct
     bool touch;
     bool motion;
     bool time;
+    bool menuButton;
 } fuzzer_t;
 
 //==============================================================================
@@ -55,10 +56,11 @@ static fuzzer_t fuzzer = {0};
 static bool fuzzerInitCb(emuArgs_t* emuArgs)
 {
     // Save the options in our own struct for convenience
-    fuzzer.buttons = emuArgs->fuzzButtons;
-    fuzzer.touch   = emuArgs->fuzzTouch;
-    fuzzer.motion  = emuArgs->fuzzMotion;
-    fuzzer.time    = emuArgs->fuzzTime;
+    fuzzer.buttons    = emuArgs->fuzzButtons;
+    fuzzer.touch      = emuArgs->fuzzTouch;
+    fuzzer.motion     = emuArgs->fuzzMotion;
+    fuzzer.time       = emuArgs->fuzzTime;
+    fuzzer.menuButton = emuArgs->fuzzMenuButton;
 
     if (emuArgs->fuzz)
     {
@@ -84,8 +86,11 @@ static void fuzzerPreFrameCb(uint64_t frame)
         uint8_t i              = rand() % 8;
         buttonBit_t fuzzButton = (1 << i);
 
-        // Inject the button event to flip that button's state
-        emulatorInjectButton(fuzzButton, (buttonState & fuzzButton) == 0);
+        if (fuzzButton != PB_SELECT || fuzzer.menuButton)
+        {
+            // Inject the button event to flip that button's state
+            emulatorInjectButton(fuzzButton, (buttonState & fuzzButton) == 0);
+        }
     }
 
     if (fuzzer.touch)
