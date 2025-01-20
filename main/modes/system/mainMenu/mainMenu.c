@@ -73,6 +73,7 @@ static void fanfareFinishedCb(void);
 // It's good practice to declare immutable strings as const so they get placed in ROM, not RAM
 const char mainMenuName[]                       = "Main Menu";
 const char mainMenuTitle[]                      = "Demo Swadge";
+const char mainMenuTitle[]                      = "Demo Swadge";
 static const char mainMenuShowSecretsMenuName[] = "Secrets In Menu: ";
 static const char factoryResetName[]            = "Factory Reset";
 static const char confirmResetName[]            = "! Confirm Reset !";
@@ -111,16 +112,16 @@ static const char screenSaverSettingsLabel[] = "Screensaver: ";
 
 static const int32_t screenSaverSettingsValues[] = {
     0,   // Off
-    10,  // 10sec
+/*     10,  // 10sec
     20,  // 20sec
     30,  // 30sec
     60,  // 60sec
     120, // 2min
-    300, // 5min
+    300, // 5min */
 };
 
 static const char* const screenSaverSettingsOptions[] = {
-    "Off", "10s", "20s", "30s", "1m", "2m", "5m",
+    "Off", /* "10s", "20s", "30s", "1m", "2m", "5m", */
 };
 
 #endif
@@ -234,6 +235,7 @@ mainMenu->menu = endSubMenu(mainMenu->menu);
 #endif
 
     // Show the battery on the main menu
+    setShowBattery(mainMenu->menu, false);
     setShowBattery(mainMenu->menu, false);
 
     // Initialize menu renderer

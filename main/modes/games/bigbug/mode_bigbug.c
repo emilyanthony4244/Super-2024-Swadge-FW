@@ -51,11 +51,8 @@ struct bb_t
 //==============================================================================
 
 // required by adam
-#ifndef SKIP_INTRO
 static void bb_EnterMode(void);
-#else
 static void bb_EnterModeSkipIntro(void);
-#endif
 static void bb_ExitMode(void);
 static void bb_MainLoop(int64_t elapsedUs);
 static void bb_BackgroundDrawCallbackBlack(int16_t x, int16_t y, int16_t w, int16_t h, int16_t up, int16_t upNum);
@@ -101,11 +98,7 @@ swadgeMode_t bigbugMode = {.modeName          = bigbugName,
                            .usesThermometer   = true,
                            .overrideSelectBtn = false,
                            .fnAudioCallback   = NULL,
-#ifndef SKIP_INTRO
                            .fnEnterMode = bb_EnterMode,
-#else
-                           .fnEnterMode = bb_EnterModeSkipIntro,
-#endif
                            .fnExitMode               = bb_ExitMode,
                            .fnMainLoop               = bb_MainLoop,
                            .fnBackgroundDrawCallback = bb_BackgroundDrawCallback,
@@ -126,10 +119,21 @@ uint8_t* bb_decodeSpace;
 // Required Functions
 //==============================================================================
 
-#ifndef SKIP_INTRO
+//#ifndef SKIP_INTRO
 
 static void bb_EnterMode(void)
 {
+#ifndef SKIP_INTRO
+    int32_t attract;
+    if (readNvs32("_attract", &attract) && attract == 1)
+    {
+#endif
+        bb_EnterModeSkipIntro();
+        return;
+#ifndef SKIP_INTRO
+    }
+#endif
+
     setFrameRateUs(16667); // 60 FPS
 
     // Force draw a loading screen
@@ -207,7 +211,7 @@ static void bb_EnterMode(void)
     soundPlayBgm(&bigbug->gameData.bgm, MIDI_BGM);
 }
 
-#else
+//#else
 
 static void bb_EnterModeSkipIntro(void)
 {
@@ -318,13 +322,19 @@ static void bb_EnterModeSkipIntro(void)
     // Set the mode to game mode
     bigbug->gameData.screen = BIGBUG_GAME;
 
+    int32_t attract;
+    if (readNvs32("_attract", &attract) && attract == 1)
+    {
+        bigbug->gameData.tutorialFlags = 255;
+    }
+
     bb_setupMidi();
     unloadMidiFile(&bigbug->gameData.bgm);
     loadMidiFile("BigBugExploration.mid", &bigbug->gameData.bgm, true);
     globalMidiPlayerPlaySong(&bigbug->gameData.bgm, MIDI_BGM);
 }
 
-#endif
+//#endif
 
 void bb_setupMidi(void)
 {
