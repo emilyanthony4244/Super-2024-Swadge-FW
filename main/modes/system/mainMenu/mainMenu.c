@@ -73,7 +73,6 @@ static void fanfareFinishedCb(void);
 // It's good practice to declare immutable strings as const so they get placed in ROM, not RAM
 const char mainMenuName[]                       = "Main Menu";
 const char mainMenuTitle[]                      = "Demo Swadge";
-const char mainMenuTitle[]                      = "Demo Swadge";
 static const char mainMenuShowSecretsMenuName[] = "Secrets In Menu: ";
 static const char factoryResetName[]            = "Factory Reset";
 static const char confirmResetName[]            = "! Confirm Reset !";
