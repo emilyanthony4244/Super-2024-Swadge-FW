@@ -339,7 +339,8 @@ static void t48MainLoop(int64_t elapsedUs)
                 if (evt.down && (PB_A == evt.button || PB_B == evt.button))
                 {
                     soundPlaySfx(&t48->click, MIDI_SFX);
-                    bool doTiltControls = PB_B == evt.button;
+                    bool doTiltControls = 0;
+                    // Hardcoded tilt FALSE for the cab
 
                     if (doTiltControls)
                     {

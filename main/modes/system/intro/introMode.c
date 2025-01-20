@@ -71,7 +71,7 @@ static const tutorialStep_t buttonsSteps[] = {
             .buttons = ALL_BUTTONS,
         },
         .title = startTitle,
-        .detail = "Press any button to continue",
+        .detail = "Welcome to the Demo Swadge Cab! This is a pared down version of the Swadge, or swag-badge, which you can get at the Merch booth in Expo E. Press any button to continue.",
     },
     {
         .trigger = {
@@ -79,7 +79,7 @@ static const tutorialStep_t buttonsSteps[] = {
             .buttons = DPAD_BUTTONS,
         },
         .title = dpadTitle,
-        .detail = "These four buttons on the left side of the Swadge are the D-Pad. Use them to navigate. Try them all out!",
+        .detail = "These four buttons on the left side of the Swadge are the D-Pad. On the Cab, it's the left joystick. Try it out!",
     },
     {
         .trigger = {
@@ -106,12 +106,12 @@ static const tutorialStep_t buttonsSteps[] = {
         .detail = "The Pause button is mode-specific, but usually pauses a game or performs a special function. Give it a try!",
     },
     {
-        .trigger = {
+         .trigger = {
             .type = TOUCH_SPIN,
             .intData = -1,
         },
         .title = touchpadTitle,
-        .detail = "The C Gem is a touchpad! Give it a try by spinning your finger around it clockwise."
+        .detail = "The C Gem is a touchpad on the Swadge! On the Demo Cab, it is the other joystick. Spin clockwise."
     },
     {
         .trigger = {
@@ -119,9 +119,9 @@ static const tutorialStep_t buttonsSteps[] = {
             .intData = 1,
         },
         .title = touchpadTitle,
-        .detail = "OK, now spin your finger around it counter-clockwise. Always remember to unwind the touchpad after use!"
-    },
-    {
+        .detail = "OK, now spin it counter-clockwise!"
+    }, 
+ /*   {
         .trigger = {
             .type = IMU_ORIENT,
             .orientation = {0, 0, 245},
@@ -159,7 +159,7 @@ static const tutorialStep_t buttonsSteps[] = {
         },
         .title = spkTitle,
         .detail = "If the speaker sounds a little fuzzy at high volumes, that's OK. It just means it's happy! Press A to continue."
-    },
+    }, */
     {
         .trigger = {
             .type = BUTTON_PRESS,
@@ -184,8 +184,8 @@ static const tutorialStep_t buttonsSteps[] = {
     },
     {
         .trigger = {
-            .type = CUSTOM_TRIGGER,
-            .custom.checkFn = introCheckQuickSettingsTrigger,
+            .type = BUTTON_PRESS,
+            .buttons = PB_SELECT,
         },
         .title = mnuBtnTitle,
         .detail = "This is the Quick Settings Menu! It's available in all modes, except for the Main Menu and USB Gamepad. Press the Menu button again to close it.",
@@ -877,17 +877,19 @@ static void introTutorialCb(tutorialState_t* state, const tutorialStep_t* prev, 
     }
 
     // TODO maybe don't hardcode this
-    if (next == (buttonsSteps + 12))
+    // Emily note: minus 5 in each of these because I commented out 5 button steps for the cab emulator lol
+
+    if (next == (buttonsSteps + 12 - 5))
     {
         setDacShutdown(true);
     }
-    else if (next == (buttonsSteps + 14))
+    else if (next == (buttonsSteps + 14 - 5))
     {
         ESP_LOGI("Intro", "Oh it's the one we want: %s", next->title);
         iv->quickSettingsOpened = true;
         openQuickSettings();
     }
-    else if (next == (buttonsSteps + 15))
+    else if (next == (buttonsSteps + 15 - 5))
     {
         iv->quickSettingsOpened = false;
     }
