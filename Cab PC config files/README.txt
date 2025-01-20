@@ -5,7 +5,8 @@ Hello! This is the Swadge Emulator for Super 2025. You are reading this because:
 3. Something seems wrong with the emulator settings
 4. Or, you're a nebby person
 
-Swadge Emulator version: Swadge Release 2.1.1 + cab emulator fork 3ff6b9c
+Swadge Emulator version: Swadge Release 2.1.1 + cab emulator fork be75048
+
 
 Scenario 1:
 
@@ -21,7 +22,9 @@ To relaunch the emulator, run the reload_emulator.bat file. Don't close that fil
 
 Scenario 3:
 
-Run this in cmd to get it to launch correctly: swadge_emulator.exe -f --hide-leds --headless
+Run this in cmd to get it to launch correctly: 
+
+swadge_emulator.exe -f --hide-leds --headless --screensaver
 
 Scenario 4:
 
