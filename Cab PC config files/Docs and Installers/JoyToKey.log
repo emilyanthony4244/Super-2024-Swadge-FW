@@ -1,0 +1,58 @@
+2025/01/10 15:56:53.703 Info   Starting JoyToKey v7.0.0
+2025/01/10 15:56:53.703 Info   ExeFile = C:\Program Files (x86)\JoyToKey\JoyToKey.exe
+2025/01/10 15:56:53.703 Info   Args = C:\Program Files (x86)\JoyToKey\JoyToKey.exe
+2025/01/10 15:56:53.703 Info   DataDirectory = C:\Users\eanthony\Documents\JoyToKey\
+2025/01/10 15:56:53.703 Info   Profile = 
+2025/01/10 15:56:53.703 Info   IniFile = C:\Users\eanthony\Documents\JoyToKey\JoyToKey.ini
+2025/01/10 15:56:53.704 Info   Loading ini file: C:\Users\eanthony\Documents\JoyToKey\JoyToKey.ini (AppInfo.cpp#263)
+2025/01/10 15:56:53.722 Info   LicenseKey "" is not valid
+2025/01/10 15:56:53.840 Info   Loading hid.dll (Joystick/ProcessingHID.h#58)
+2025/01/10 15:56:53.841 Info   Initialized HID (Joystick\Processing.cpp#171)
+2025/01/10 15:56:53.841 Info   Loading XInput1_4.dll (Joystick\Processing.cpp#181)
+2025/01/10 15:56:53.844 Info   Initialized XInput (Joystick\Processing.cpp#206)
+2025/01/10 15:56:53.900 Info   Initialized DirectInput (Joystick\Processing.cpp#219)
+2025/01/10 15:56:53.902 Info   Detected a HID controller[0]: VendorId=1209, ProductId=4269, UsagePage=1, Usage=5, Path=\\?\HID#VID_1209&PID_4269#6&1542f3b4&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+2025/01/10 15:56:53.903 Info   Vendor = Magfest
+2025/01/10 15:56:53.903 Info   Product = Swadge Controller
+2025/01/10 15:56:53.903 Info   DeviceName = Swadge Controller
+2025/01/10 15:56:53.903 Info   numAxis = 6 [1,1,1,1,1,1,0,0]
+2025/01/10 15:56:53.903 Info   numPOVs = 1
+2025/01/10 15:56:53.903 Info   numButtons = 32
+2025/01/10 15:56:53.926 Info   Detected a DI joystick: Swadge Controller, Swadge Controller, 42691209, {44E87300-CC4C-11EF-8005-444553540000}
+2025/01/10 15:56:53.927 Info   numAxis = 6
+2025/01/10 15:56:53.927 Info   numPOVs = 1
+2025/01/10 15:56:53.927 Info   numButtons = 32
+2025/01/10 15:56:53.927 Info   EnumDeviceObject: Axis offset=0 type=402 name=Y Rotation
+2025/01/10 15:56:53.927 Info   EnumDeviceObject: Axis offset=4 type=302 name=X Rotation
+2025/01/10 15:56:53.927 Info   EnumDeviceObject: Axis offset=8 type=502 name=Z Rotation
+2025/01/10 15:56:53.927 Info   EnumDeviceObject: Axis offset=12 type=202 name=Z Axis
+2025/01/10 15:56:53.927 Info   EnumDeviceObject: Axis offset=16 type=102 name=Y Axis
+2025/01/10 15:56:53.927 Info   EnumDeviceObject: Axis offset=20 type=2 name=X Axis
+2025/01/10 15:56:53.941 Info   DetectJoysticks: Detected 1 DI joystick(s)
+2025/01/10 15:56:53.946 Info   Assign Swadge Controller to Joystick #1 ({44E87300-CC4C-11EF-8005-444553540000})
+2025/01/10 15:56:53.946 Info   1 joystick(s) are detected (Joystick\Processing.cpp#306)
+2025/01/10 15:56:53.946 Info   ConfigDir=C:\Users\eanthony\Documents\JoyToKey\*.cfg (ConfigFileManager.cpp#41)
+2025/01/10 15:56:53.971 Info   Failed to find AppLink.dat (AppLink\AppLinkManager.cpp#29)
+2025/01/10 15:56:54.042 Info   TimerInit: Initializing timer with x1 speed mode (interval = 16 msec)
+2025/01/10 15:56:54.317 Info   Detected a HID controller[0]: VendorId=1209, ProductId=4269, UsagePage=1, Usage=5, Path=\\?\HID#VID_1209&PID_4269#6&1542f3b4&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+2025/01/10 15:56:54.317 Info   Vendor = Magfest
+2025/01/10 15:56:54.317 Info   Product = Swadge Controller
+2025/01/10 15:56:54.317 Info   DeviceName = Swadge Controller
+2025/01/10 15:56:54.317 Info   numAxis = 6 [1,1,1,1,1,1,0,0]
+2025/01/10 15:56:54.317 Info   numPOVs = 1
+2025/01/10 15:56:54.317 Info   numButtons = 32
+2025/01/10 15:56:54.333 Info   Detected a DI joystick: Swadge Controller, Swadge Controller, 42691209, {44E87300-CC4C-11EF-8005-444553540000}
+2025/01/10 15:56:54.335 Info   numAxis = 6
+2025/01/10 15:56:54.335 Info   numPOVs = 1
+2025/01/10 15:56:54.335 Info   numButtons = 32
+2025/01/10 15:56:54.335 Info   EnumDeviceObject: Axis offset=0 type=402 name=Y Rotation
+2025/01/10 15:56:54.335 Info   EnumDeviceObject: Axis offset=4 type=302 name=X Rotation
+2025/01/10 15:56:54.335 Info   EnumDeviceObject: Axis offset=8 type=502 name=Z Rotation
+2025/01/10 15:56:54.335 Info   EnumDeviceObject: Axis offset=12 type=202 name=Z Axis
+2025/01/10 15:56:54.335 Info   EnumDeviceObject: Axis offset=16 type=102 name=Y Axis
+2025/01/10 15:56:54.335 Info   EnumDeviceObject: Axis offset=20 type=2 name=X Axis
+2025/01/10 15:56:54.353 Info   DetectJoysticks: Detected 1 DI joystick(s)
+2025/01/10 15:56:54.355 Info   Assign Swadge Controller to Joystick #1 ({44E87300-CC4C-11EF-8005-444553540000})
+2025/01/10 15:56:54.355 Info   1 joystick(s) are detected (Joystick\Processing.cpp#306)
+2025/01/10 15:57:47.757 Info   Save config file "Swadge Emulator" (ConfigFileManager.cpp#430)
+2025/01/10 16:11:32.594 Info   Save config file "Swadge Emulator" (ConfigFileManager.cpp#430)
